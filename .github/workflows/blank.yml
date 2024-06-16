@@ -1,4 +1,4 @@
-name: Burba
+name: CI
 
 on:
   push:
@@ -22,6 +22,11 @@ jobs:
 
       - name: Install Expo CLI
         run: npm install -g expo-cli
+
+      - name: Install expo and dependencies
+        run: |
+          npm install expo
+          expo install
 
       - name: Remove EXPO_TOKEN from environment
         run: |
