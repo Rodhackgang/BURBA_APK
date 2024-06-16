@@ -32,17 +32,18 @@ jobs:
         run: expo login --token $EXPO_TOKEN
 
       - name: Build APK
-        run: expo build:android --no-wait
+        run: expo build:android --non-interactive --no-wait
 
-      - name: Wait for build to complete
+      - name: Wait for build to complete and download APK
         run: |
-          ID=$(expo build:status | grep -oP '(?<=id":")[^"]+')
-          URL="https://expo.io/artifacts/${ID}"
-          echo $URL
-        shell: bash 
+          sleep 60  # Wait a bit for the build to start
+          build_id=$(expo build:status --type android --json | jq -r '.id')
+          apk_url=$(expo build:status --type android --json | jq -r '.artifacts.url')
+          echo "APK URL: $apk_url"
+          curl -o app-release.apk $apk_url
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
           name: app-release.apk
-          path: ./path/to/downloaded/apk
+          path: app-release.apk
