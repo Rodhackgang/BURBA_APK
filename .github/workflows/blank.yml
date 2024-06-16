@@ -1,4 +1,4 @@
-name: Burba
+name: CI
 
 on:
   push:
@@ -26,13 +26,20 @@ jobs:
       - name: Install Expo CLI
         run: npm install -g expo-cli
 
-      - name: Log in to Expo
+      - name: Authenticate with Expo
         env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: expo login --token $EXPO_TOKEN
+          EXPO_CLI_USERNAME: ${{ secrets.EXPO_CLI_USERNAME }}
+          EXPO_CLI_PASSWORD: ${{ secrets.EXPO_CLI_PASSWORD }}
+        run: |
+          expect <<EOF
+          spawn expo login
+          expect "Username/Email Address:" { send "$EXPO_CLI_USERNAME\r" }
+          expect "Password:" { send "$EXPO_CLI_PASSWORD\r" }
+          expect eof
+          EOF
 
       - name: Build APK
-        run: expo build:android --non-interactive --no-wait
+        run: expo build:android --non-interactive
 
       - name: Wait for build to complete and download APK
         run: |
