@@ -23,9 +23,15 @@ jobs:
       - name: Install Expo CLI
         run: npm install -g expo-cli
 
+      - name: Remove EXPO_TOKEN from environment
+        run: |
+          unset EXPO_TOKEN
+          echo "Removed EXPO_TOKEN from environment"
+
       - name: Authenticate with Expo
         env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EXPO_CLI_USERNAME: ${{ secrets.EXPO_CLI_USERNAME }}
+          EXPO_CLI_PASSWORD: ${{ secrets.EXPO_CLI_PASSWORD }}
         run: expo login --non-interactive --username $EXPO_CLI_USERNAME --password $EXPO_CLI_PASSWORD
 
       - name: Build APK
