@@ -39,7 +39,7 @@ jobs:
           ID=$(expo build:status | grep -oP '(?<=id":")[^"]+')
           URL="https://expo.io/artifacts/${ID}"
           echo $URL
-        shell: bash
+        shell: bash 
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
