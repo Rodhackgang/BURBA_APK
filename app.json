@@ -1,7 +1,12 @@
 {
   "expo": {
+<<<<<<< HEAD
     "name": "Burbu",
     "slug": "Burbu",
+=======
+    "name": "Burba_Bac",
+    "slug": "Burba_Bac",
+>>>>>>> 63d5119 (Initial commit)
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

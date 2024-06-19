@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "burbu",
+=======
+  "name": "burba_bac",
+>>>>>>> 63d5119 (Initial commit)
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
@@ -9,7 +13,11 @@
     "web": "expo start --web"
   },
   "dependencies": {
+<<<<<<< HEAD
     "expo": "~51.0.13",
+=======
+    "expo": "~51.0.14",
+>>>>>>> 63d5119 (Initial commit)
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",
     "react-native": "0.74.2"
