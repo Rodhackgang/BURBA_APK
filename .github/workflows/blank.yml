@@ -1,57 +1,41 @@
-name: CI
+name: Burba apk
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
           node-version: '14'
 
-      - name: Install Expo CLI
-        run: npm install -g expo-cli
+      - name: Install dependencies
+        run: npm install
 
-      - name: Install expo and dependencies
-        run: |
-          npm install expo
-          expo install
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
 
-      - name: Remove EXPO_TOKEN from environment
-        run: |
-          unset EXPO_TOKEN
-          echo "Removed EXPO_TOKEN from environment"
-
-      - name: Authenticate with Expo
-        env:
-          EXPO_CLI_USERNAME: ${{ secrets.EXPO_CLI_USERNAME }}
-          EXPO_CLI_PASSWORD: ${{ secrets.EXPO_CLI_PASSWORD }}
-        run: expo login --non-interactive --username $EXPO_CLI_USERNAME --password $EXPO_CLI_PASSWORD
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
 
       - name: Build APK
-        run: expo build:android --non-interactive
-
-      - name: Wait for build to complete and download APK
         run: |
-          sleep 60  # Wait a bit for the build to start
-          build_id=$(expo build:status --type android --json | jq -r '.id')
-          apk_url=$(expo build:status --type android --json | jq -r '.artifacts.url')
-          echo "APK URL: $apk_url"
-          curl -o app-release.apk $apk_url
+          cd android
+          ./gradlew assembleRelease
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: app-release.apk
-          path: app-release.apk
+          path: android/app/build/outputs/apk/release/burba.apk
